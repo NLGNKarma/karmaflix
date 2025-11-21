@@ -2,10 +2,644 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>KarmaFlix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KarmaFlix • Tier list cinéma personnelle</title>
+  <style>
+    :root {
+      --bg: #0c0f1a;
+      --panel: #12172a;
+      --panel-light: #1c2440;
+      --accent: #f25c54;
+      --accent-2: #4cc9f0;
+      --text: #e8ecf7;
+      --muted: #9aa4c4;
+      --border: #24304f;
+      --success: #6ad68b;
+      --warning: #ffd166;
+      --danger: #ef476f;
+      --radius: 14px;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 10% 20%, rgba(76,201,240,0.08) 0, transparent 25%),
+                  radial-gradient(circle at 90% 30%, rgba(242,92,84,0.08) 0, transparent 25%),
+                  radial-gradient(circle at 20% 80%, rgba(106,214,139,0.08) 0, transparent 25%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(135deg, rgba(76,201,240,0.12), rgba(242,92,84,0.12));
+      padding: 36px clamp(16px, 3vw, 48px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(6px);
+    }
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: center;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #0c0f1a;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 32px);
+    }
+    .tagline { color: var(--muted); margin-top: 4px; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    main { padding: 24px clamp(16px, 3vw, 48px) 56px; }
+    .layout { max-width: 1200px; margin: 0 auto; display: grid; gap: 24px; }
+
+    .panel {
+      background: rgba(16,22,41,0.9);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.35);
+    }
+    .panel h2 { margin-top: 0; letter-spacing: -0.01em; }
+    .muted { color: var(--muted); }
+
+    .grid-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+    .stat {
+      background: var(--panel-light);
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .stat .label { color: var(--muted); font-size: 13px; }
+    .stat .value { font-size: 24px; font-weight: 700; margin-top: 6px; }
+
+    form {
+      display: grid;
+      gap: 12px;
+    }
+    label { font-weight: 600; display: block; margin-bottom: 4px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--panel-light);
+      color: var(--text);
+      font-size: 15px;
+    }
+    textarea { resize: vertical; min-height: 140px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #0c0f1a;
+      transition: transform 0.12s ease, box-shadow 0.2s ease;
+    }
+    button.primary {
+      background: linear-gradient(135deg, var(--accent), #ff8e72);
+      box-shadow: 0 12px 30px rgba(242,92,84,0.35);
+    }
+    button.secondary {
+      background: var(--panel-light);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    button:hover { transform: translateY(-1px); }
+
+    .movie-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .movie-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: grid;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .tier-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      color: #0c0f1a;
+    }
+    .tier-S { background: linear-gradient(135deg, #f8ff9c, #ffd166); }
+    .tier-A { background: linear-gradient(135deg, #a1ffce, #6ad68b); }
+    .tier-B { background: linear-gradient(135deg, #98c1ff, #4cc9f0); }
+    .tier-C { background: linear-gradient(135deg, #ffc8dd, #ff92b2); }
+    .tier-D { background: linear-gradient(135deg, #ffd6a5, #ffad66); }
+    .tier-F { background: linear-gradient(135deg, #fcb9b2, #ef476f); }
+
+    .movie-meta { color: var(--muted); font-size: 14px; }
+    .stars { color: #ffd166; font-size: 18px; }
+    .stars .note-value { font-weight: 800; color: var(--text); }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--panel-light);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      color: var(--text);
+    }
+    .note { color: var(--muted); line-height: 1.5; }
+    .card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .favorite { color: #ffb703; }
+    .empty { text-align: center; color: var(--muted); padding: 30px 0; }
+
+    .preview-wrapper {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+      align-items: start;
+    }
+    .preview-wrapper .movie-card { box-shadow: inset 0 0 0 1px rgba(76,201,240,0.15); }
+    .preview-note { color: var(--muted); margin: 8px 0 0; }
+    .preview-muted-actions { opacity: 0.6; cursor: not-allowed; }
+
+    .filters { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .movie-card { padding: 14px; }
+      .tier-badge { top: 10px; right: 10px; }
+    }
+  </style>
 </head>
 <body>
-  <h1>Bienvenue sur KarmaFlix</h1>
-  <p>Site de streaming en développement.</p>
+  <header>
+    <div class="hero">
+      <div>
+        <div class="brand">
+          <div class="logo">KF</div>
+          <div>
+            <h1>KarmaFlix – Ma tier list cinéma</h1>
+            <p class="tagline">Ajoute tes films, classe-les par tier, garde une trace de tes coups de cœur et des déceptions.</p>
+          </div>
+        </div>
+      </div>
+      <div class="pill">🎬 Organise • ⭐ Note • 🏷️ Classe</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="layout">
+      <section class="panel">
+        <h2>Nouvelle entrée</h2>
+        <p class="muted">Complète le formulaire pour ajouter un film à ta tier list. Les données sont sauvegardées dans ton navigateur.</p>
+        <form id="movie-form">
+          <div class="grid-two">
+            <div>
+              <label for="title">Titre</label>
+              <input id="title" name="title" required placeholder="Ex : Interstellar">
+            </div>
+            <div>
+              <label for="year">Année</label>
+              <input id="year" name="year" type="number" min="1900" max="2100" placeholder="2014">
+            </div>
+          </div>
+          <div class="grid-two">
+            <div>
+              <label for="genre">Genre</label>
+              <input id="genre" name="genre" placeholder="Science-fiction, Drame...">
+            </div>
+            <div>
+              <label for="tier">Tier</label>
+              <select id="tier" name="tier" required>
+                <option value="S">S • Chef-d'œuvre</option>
+                <option value="A">A • Excellent</option>
+                <option value="B">B • Solide</option>
+                <option value="C">C • Sympa</option>
+                <option value="D">D • Mitigé</option>
+                <option value="F">F • À oublier</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-two">
+            <div>
+              <label for="rating">Note (sur 10, décimale avec virgule possible)</label>
+              <input id="rating" name="rating" inputmode="decimal" pattern="[0-9]+([\.,][0-9]+)?" placeholder="Ex : 8,5" value="8,5">
+            </div>
+            <div>
+              <label for="feeling">Appréciation courte</label>
+              <input id="feeling" name="feeling" placeholder="Un space opera hypnotique...">
+            </div>
+          </div>
+          <div>
+            <label for="review">Appréciation globale (optionnel)</label>
+            <textarea id="review" name="review" placeholder="Développe ton ressenti ou laisse vide."></textarea>
+          </div>
+          <div class="actions">
+            <button type="submit" class="primary">Ajouter à la tier list</button>
+            <button type="reset" class="secondary">Effacer</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="actions" style="justify-content: space-between; align-items: baseline;">
+          <div>
+            <h2 style="margin: 0;">Aperçu en direct</h2>
+            <p class="preview-note">Le rendu se met à jour en fonction du formulaire, avant l'ajout définitif.</p>
+          </div>
+          <span class="muted">Lecture seule</span>
+        </div>
+        <div class="preview-wrapper">
+          <div id="preview-card"></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Vue d'ensemble</h2>
+        <div class="stats" id="stats"></div>
+        <div class="filters" style="margin-top: 12px;">
+          <input id="search" placeholder="Rechercher un titre...">
+          <select id="filter-tier">
+            <option value="">Tous les tiers</option>
+            <option value="S">Tier S</option>
+            <option value="A">Tier A</option>
+            <option value="B">Tier B</option>
+            <option value="C">Tier C</option>
+            <option value="D">Tier D</option>
+            <option value="F">Tier F</option>
+          </select>
+          <select id="filter-genre">
+            <option value="">Tous les genres</option>
+          </select>
+          <select id="filter-sort">
+            <option value="recent">Tri : récent</option>
+            <option value="rating">Tri : meilleure note</option>
+            <option value="title">Tri : titre A→Z</option>
+            <option value="tier">Tri : tier</option>
+          </select>
+          <select id="filter-min-rating">
+            <option value="0">Note minimale</option>
+            <option value="5">5/10</option>
+            <option value="6">6/10</option>
+            <option value="7">7/10</option>
+            <option value="7.5">7,5/10</option>
+            <option value="8">8/10</option>
+            <option value="9">9/10</option>
+            <option value="9.5">9,5/10</option>
+            <option value="10">10/10</option>
+          </select>
+          <button id="toggle-fav" class="secondary" type="button">Afficher seulement les favoris ★</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="actions" style="justify-content: space-between; align-items: center;">
+          <h2 style="margin: 0;">Tier list personnelle</h2>
+          <span class="muted" id="counter"></span>
+        </div>
+        <div id="movie-list" class="movie-grid"></div>
+        <div id="empty" class="empty" style="display:none;">Pas encore de film enregistré. Ajoute ton premier !</div>
+      </section>
+    </div>
+  </main>
+
+  <template id="movie-card-template">
+    <article class="movie-card">
+      <div class="tier-badge"></div>
+      <div class="actions" style="justify-content: space-between; align-items: center;">
+        <h3 class="title" style="margin: 0;"></h3>
+        <button class="secondary favorite-btn" type="button">★</button>
+      </div>
+      <div class="movie-meta"></div>
+      <div class="stars"></div>
+      <div class="chips"></div>
+      <p class="note"></p>
+      <div class="card-actions">
+        <button class="secondary delete-btn" type="button">Supprimer</button>
+      </div>
+    </article>
+  </template>
+
+  <script>
+    const form = document.querySelector('#movie-form');
+    const listEl = document.querySelector('#movie-list');
+    const emptyEl = document.querySelector('#empty');
+    const statsEl = document.querySelector('#stats');
+    const counterEl = document.querySelector('#counter');
+    const searchInput = document.querySelector('#search');
+    const filterTier = document.querySelector('#filter-tier');
+    const filterGenre = document.querySelector('#filter-genre');
+    const filterSort = document.querySelector('#filter-sort');
+    const filterMinRating = document.querySelector('#filter-min-rating');
+    const toggleFavBtn = document.querySelector('#toggle-fav');
+    const cardTemplate = document.querySelector('#movie-card-template');
+    const previewCardSlot = document.querySelector('#preview-card');
+
+    const STORAGE_KEY = 'karmaflix-movies-v1';
+
+    const tierOrder = ['S', 'A', 'B', 'C', 'D', 'F'];
+
+    const sampleMovies = [
+      {
+        title: 'Interstellar',
+        year: 2014,
+        genre: 'Science-fiction',
+        tier: 'S',
+        rating: 9.6,
+        feeling: 'Immersion totale et bande-son démentielle.',
+        review: 'Un voyage spatial qui parle surtout d\'amour. Nolan au sommet.',
+        favorite: true,
+      },
+      {
+        title: 'Whiplash',
+        year: 2014,
+        genre: 'Drame',
+        tier: 'A',
+        rating: 9.0,
+        feeling: 'Plus de sueur que dans une salle de sport.',
+        review: 'Un duel mentor-élève aussi violent que captivant.',
+        favorite: false,
+      },
+      {
+        title: 'Mad Max: Fury Road',
+        year: 2015,
+        genre: 'Action',
+        tier: 'S',
+        rating: 9.4,
+        feeling: 'Deux heures de poursuite iconique.',
+        review: 'Visuellement dingue, un modèle de mise en scène.',
+        favorite: true,
+      }
+    ];
+
+    function loadMovies() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) return JSON.parse(stored);
+      return sampleMovies.map(m => ({ ...m, id: crypto.randomUUID(), createdAt: Date.now() - Math.random()*1e9 }));
+    }
+
+    let movies = loadMovies().map(m => ({ ...m, rating: parseRating(m.rating) }));
+    let onlyFavorites = false;
+
+    function saveMovies() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(movies));
+    }
+
+    function parseRating(value) {
+      const normalized = String(value ?? '').replace(',', '.');
+      const num = parseFloat(normalized);
+      if (isNaN(num)) return 0;
+      return Math.min(10, Math.max(0, num));
+    }
+
+    function formatRating(value) {
+      return parseRating(value).toFixed(1).replace('.', ',');
+    }
+
+    function buildStars(value) {
+      const fiveScale = Math.max(0, Math.min(5, value / 2));
+      const full = '★'.repeat(Math.floor(fiveScale));
+      const half = fiveScale % 1 >= 0.5 ? '½' : '';
+      const empty = '☆'.repeat(5 - Math.ceil(fiveScale));
+      return `${full}${half}${empty}`;
+    }
+
+    function renderStats() {
+      if (!movies.length) {
+        statsEl.innerHTML = '<div class="muted">Aucune donnée pour le moment.</div>';
+        return;
+      }
+      const average = movies.reduce((sum, m) => sum + Number(m.rating || 0), 0) / movies.length;
+      const favorites = movies.filter(m => m.favorite).length;
+      const byTier = tierOrder.map(tier => ({ tier, count: movies.filter(m => m.tier === tier).length }));
+      statsEl.innerHTML = `
+        <div class="stat"><div class="label">Films suivis</div><div class="value">${movies.length}</div></div>
+        <div class="stat"><div class="label">Note moyenne</div><div class="value">${formatRating(average)}/10</div></div>
+        <div class="stat"><div class="label">Favoris</div><div class="value">${favorites}</div></div>
+        <div class="stat"><div class="label">Répartition par tier</div>
+          <div class="chips">${byTier.map(t => `<span class="chip">${t.tier}: ${t.count}</span>`).join(' ')}</div>
+        </div>
+      `;
+    }
+
+    function populateGenres() {
+      const genres = Array.from(new Set(movies.map(m => m.genre).filter(Boolean))).sort();
+      filterGenre.innerHTML = '<option value="">Tous les genres</option>' + genres.map(g => `<option value="${g}">${g}</option>`).join('');
+    }
+
+    function applyFilters() {
+      const search = searchInput.value.toLowerCase();
+      const tier = filterTier.value;
+      const genre = filterGenre.value;
+      const minRating = Number(filterMinRating.value || 0);
+
+      let filtered = movies.filter(m => {
+        const matchesSearch = m.title.toLowerCase().includes(search);
+        const matchesTier = tier ? m.tier === tier : true;
+        const matchesGenre = genre ? m.genre === genre : true;
+        const matchesRating = parseRating(m.rating) >= minRating;
+        const matchesFav = onlyFavorites ? m.favorite : true;
+        return matchesSearch && matchesTier && matchesGenre && matchesRating && matchesFav;
+      });
+
+      switch (filterSort.value) {
+        case 'rating':
+          filtered.sort((a, b) => b.rating - a.rating);
+          break;
+        case 'title':
+          filtered.sort((a, b) => a.title.localeCompare(b.title));
+          break;
+        case 'tier':
+          filtered.sort((a, b) => tierOrder.indexOf(a.tier) - tierOrder.indexOf(b.tier));
+          break;
+        default: // recent
+          filtered.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      }
+
+      renderList(filtered);
+    }
+
+    function buildCard(movie, { interactive = true } = {}) {
+      const node = cardTemplate.content.cloneNode(true);
+      const card = node.querySelector('.movie-card');
+      card.dataset.id = movie.id || 'preview';
+      card.querySelector('.tier-badge').textContent = `Tier ${movie.tier}`;
+      card.querySelector('.tier-badge').classList.add(`tier-${movie.tier}`);
+      card.querySelector('.title').textContent = movie.title;
+      const meta = [];
+      if (movie.year) meta.push(movie.year);
+      if (movie.genre) meta.push(movie.genre);
+      card.querySelector('.movie-meta').textContent = meta.join(' • ');
+      const numericRating = parseRating(movie.rating);
+      card.querySelector('.stars').innerHTML = `<span class="note-value">${formatRating(numericRating)}/10</span> · ${buildStars(numericRating)}`;
+
+      const chipsEl = card.querySelector('.chips');
+      chipsEl.innerHTML = '';
+      chipsEl.appendChild(createChip('Tier ' + movie.tier));
+      if (movie.favorite) chipsEl.appendChild(createChip('Favori ★'));
+      if (movie.feeling) chipsEl.appendChild(createChip(movie.feeling));
+
+      card.querySelector('.note').textContent = movie.review || '';
+
+      const favBtn = card.querySelector('.favorite-btn');
+      favBtn.classList.toggle('favorite', movie.favorite);
+      favBtn.textContent = movie.favorite ? '★ Favori' : '☆ Favori';
+
+      const deleteBtn = card.querySelector('.delete-btn');
+
+      if (!interactive) {
+        favBtn.disabled = true;
+        favBtn.classList.add('preview-muted-actions');
+        deleteBtn.replaceWith(createChip('Suppression indisponible en aperçu'));
+      } else {
+        favBtn.addEventListener('click', () => toggleFavorite(movie.id));
+        deleteBtn.addEventListener('click', () => deleteMovie(movie.id));
+      }
+
+      return card;
+    }
+
+    function renderList(items) {
+      listEl.innerHTML = '';
+      counterEl.textContent = `${items.length} film${items.length > 1 ? 's' : ''}`;
+      emptyEl.style.display = items.length ? 'none' : 'block';
+      items.forEach(movie => {
+        const card = buildCard(movie, { interactive: true });
+        listEl.appendChild(card);
+      });
+    }
+
+    function createChip(text) {
+      const span = document.createElement('span');
+      span.className = 'chip';
+      span.textContent = text;
+      return span;
+    }
+
+    function deleteMovie(id) {
+      movies = movies.filter(m => m.id !== id);
+      saveMovies();
+      populateGenres();
+      renderStats();
+      applyFilters();
+    }
+
+    function toggleFavorite(id) {
+      movies = movies.map(m => m.id === id ? { ...m, favorite: !m.favorite } : m);
+      saveMovies();
+      renderStats();
+      applyFilters();
+    }
+
+    function updatePreview() {
+      const data = new FormData(form);
+      const preview = {
+        title: (data.get('title') || 'Nouveau film').trim(),
+        year: Number(data.get('year')) || '',
+        genre: (data.get('genre') || '').trim(),
+        tier: data.get('tier') || 'S',
+        rating: parseRating(data.get('rating') || '0'),
+        feeling: (data.get('feeling') || '').trim(),
+        review: (data.get('review') || '').trim(),
+        favorite: false,
+      };
+
+      previewCardSlot.innerHTML = '';
+      const previewCard = buildCard(preview, { interactive: false });
+      previewCardSlot.appendChild(previewCard);
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const entry = {
+        id: crypto.randomUUID(),
+        title: (data.get('title') || '').trim(),
+        year: Number(data.get('year')) || '',
+        genre: (data.get('genre') || '').trim(),
+        tier: data.get('tier') || 'B',
+        rating: parseRating(data.get('rating')),
+        feeling: (data.get('feeling') || '').trim(),
+        review: (data.get('review') || '').trim(),
+        favorite: false,
+        createdAt: Date.now(),
+      };
+
+      if (!entry.title) return alert('Ajoute au moins un titre.');
+      movies = [entry, ...movies];
+      saveMovies();
+      form.reset();
+      form.querySelector('#tier').value = 'S';
+      form.querySelector('#rating').value = '8,5';
+      renderStats();
+      populateGenres();
+      applyFilters();
+      updatePreview();
+    });
+
+    [searchInput, filterTier, filterGenre, filterSort, filterMinRating].forEach(el => {
+      el.addEventListener('input', applyFilters);
+      el.addEventListener('change', applyFilters);
+    });
+
+    toggleFavBtn.addEventListener('click', () => {
+      onlyFavorites = !onlyFavorites;
+      toggleFavBtn.classList.toggle('primary', onlyFavorites);
+      toggleFavBtn.textContent = onlyFavorites ? 'On affiche les favoris ★' : 'Afficher seulement les favoris ★';
+      applyFilters();
+    });
+
+    form.addEventListener('input', updatePreview);
+    form.addEventListener('change', updatePreview);
+    form.addEventListener('reset', () => setTimeout(updatePreview));
+
+    // Initial render
+    renderStats();
+    populateGenres();
+    applyFilters();
+    updatePreview();
+  </script>
 </body>
 </html>
