@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="fr">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>KarmaFlix • Bibliothèque</title><link rel="stylesheet" href="css/style.css" /></head>
+<body data-page="library">
+<div data-kf-header></div>
+<main class="main-shell section-wrap">
+  <h1>Bibliothèque</h1>
+  <p class="muted">Explorez vos médias privés et contenus de démonstration.</p>
+  <input id="librarySearch" type="text" placeholder="Rechercher un titre ou un genre..." style="width:min(520px,100%);padding:12px;border-radius:10px;border:1px solid var(--border);background:#101015" />
+  <div class="filters">
+    <button class="filter-pill active" data-filter="Tous">Tous</button><button class="filter-pill" data-filter="Film">Films</button><button class="filter-pill" data-filter="Série">Séries</button><button class="filter-pill" data-filter="Animation">Animation</button><button class="filter-pill" data-filter="Action">Action</button><button class="filter-pill" data-filter="Science-fiction">Science-fiction</button><button class="filter-pill" data-filter="Horreur">Horreur</button><button class="filter-pill" data-filter="Comédie">Comédie</button>
+  </div>
+  <div id="libraryGrid" class="grid"></div>
+</main>
+<div data-kf-footer></div>
+<script src="js/data.js"></script><script src="js/ui.js"></script><script src="js/app.js"></script>
+</body></html>

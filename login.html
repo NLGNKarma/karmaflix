@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KarmaFlix • Connexion</title>
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body class="auth-body">
+  <main class="auth-wrap">
+    <form class="auth-card" id="loginForm">
+      <div class="brand-line"><span class="brand-k"></span><span>KarmaFlix</span></div>
+      <h1>Connexion</h1>
+      <label class="field">Email / Identifiant
+        <input type="email" name="email" placeholder="vous@exemple.com" required />
+      </label>
+      <label class="field">Mot de passe
+        <input type="password" name="password" placeholder="••••••••" required />
+      </label>
+      <div class="row"><label><input type="checkbox" checked /> Se souvenir de moi</label><a href="#">Mot de passe oublié ?</a></div>
+      <p class="error"></p>
+      <button class="btn-auth" type="submit">Se connecter</button>
+      <div class="auth-links">
+        <span>Nouvel utilisateur ? <a href="register.html">Créer un compte</a></span>
+        <a href="intro.html">Revoir l’intro</a>
+      </div>
+    </form>
+  </main>
+  <script src="js/auth.js"></script>
+</body>
+</html>

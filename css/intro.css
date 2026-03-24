@@ -1,0 +1,180 @@
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body.intro-body {
+  font-family: Inter, system-ui, sans-serif;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+#container {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% -20%, #260004 0%, #000 60%);
+}
+
+#container netflixintro {
+  display: block;
+  position: relative;
+  width: min(62vw, 330px);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  animation: zoom-in 3.8s .3s ease-in forwards;
+  filter: drop-shadow(0 0 24px rgba(228,9,19,.65));
+}
+
+#container netflixintro::before {
+  content: "";
+  position: absolute;
+  display: block;
+  background-color: #000;
+  width: 160%;
+  height: 32%;
+  left: -30%;
+  bottom: -28%;
+  border-radius: 50%;
+  z-index: 8;
+}
+
+#container netflixintro[letter=K] {
+  transform-origin: 32% center;
+}
+
+#container netflixintro[letter=K] .helper-1 {
+  width: 19.5%;
+  height: 100%;
+  left: 22%;
+  top: 0;
+  transform: rotate(180deg);
+  background-color: rgba(228, 9, 19, 0.5);
+  animation: fading-lumieres-box 2s .6s forwards;
+}
+
+#container netflixintro[letter=K] .helper-2 {
+  width: 19%;
+  height: 90%;
+  left: 40%;
+  top: 5%;
+  transform: rotate(-39deg);
+  overflow: hidden;
+}
+
+#container netflixintro[letter=K] .helper-3 {
+  width: 19%;
+  height: 80%;
+  left: 40%;
+  top: 43%;
+  transform: rotate(38deg);
+  overflow: hidden;
+}
+
+#container netflixintro[letter=K] .helper-4 {
+  width: 9%;
+  height: 28%;
+  left: 43.5%;
+  top: 38%;
+  opacity: .8;
+}
+
+#container netflixintro [class*=helper-] {
+  position: absolute;
+}
+
+#container netflixintro [class*=helper-] .effect-brush {
+  position: absolute;
+  width: 100%;
+  height: 300%;
+  inset: 0;
+  overflow: hidden;
+  animation: brush-moving 2.2s forwards;
+}
+#container netflixintro .helper-1 .effect-brush { animation-delay: 1.05s; }
+#container netflixintro .helper-2 .effect-brush { animation-delay: .55s; }
+#container netflixintro .helper-3 .effect-brush { animation-delay: .85s; }
+#container netflixintro .helper-4 .effect-brush { animation-delay: .95s; }
+
+#container netflixintro [class*=helper-] .effect-brush::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 70%;
+  background-color: #e40913;
+  box-shadow: 0 0 26px 20px rgba(228, 9, 19, .92);
+}
+
+#container netflixintro [class*=helper-] .effect-brush .fur {
+  position: absolute;
+  bottom: 10%;
+  height: 35%;
+  background: linear-gradient(to bottom, #e40913 0%, #e40913 var(--a), rgba(0,0,0,0) 100%);
+  left: var(--x);
+  width: var(--w);
+}
+
+#container netflixintro [class*=helper-] .effect-lumieres {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: showing-lumieres 2s 1.6s forwards;
+}
+
+#container netflixintro [class*=helper-] .effect-lumieres .lamp {
+  position: absolute;
+  inset: 0 auto 0 var(--x);
+  width: var(--w);
+  background: var(--c);
+  box-shadow: 0 0 10px rgba(228, 9, 19, .75);
+  animation: var(--dir) 5s forwards;
+  animation-delay: var(--d);
+}
+
+.intro-title {
+  position: absolute;
+  bottom: 12%;
+  letter-spacing: .34em;
+  text-transform: uppercase;
+  font-size: clamp(1.2rem, 4.2vw, 2.2rem);
+  opacity: 0;
+  animation: fade-title .8s 1.25s forwards;
+}
+
+.skip-btn {
+  position: fixed;
+  right: 18px;
+  top: 18px;
+  border: 1px solid rgba(255,255,255,.35);
+  background: rgba(0,0,0,.35);
+  color: #fff;
+  border-radius: 999px;
+  padding: 8px 13px;
+  cursor: pointer;
+  z-index: 20;
+}
+
+@keyframes brush-moving { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+@keyframes lumieres-moving-right {
+  0% { transform: translate(0); }
+  40% { transform: translate(-10px) scaleX(1); }
+  100% { transform: translate(-120px) scaleX(3); }
+}
+@keyframes lumieres-moving-left {
+  0% { transform: translate(0); }
+  40% { transform: translate(10px) scaleX(1); }
+  100% { transform: translate(120px) scaleX(3); }
+}
+@keyframes zoom-in { from { transform: scale(1); } to { transform: scale(15); } }
+@keyframes showing-lumieres { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fading-lumieres-box { from { background-color: rgba(228,9,19,.5); } to { background-color: rgba(228,9,19,0); } }
+@keyframes fade-title { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 640px) {
+  #container netflixintro { width: min(78vw, 290px); }
+}
