@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KarmaFlix • Inscription</title>
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body class="auth-body">
+  <main class="auth-wrap">
+    <form class="auth-card" id="registerForm">
+      <div class="brand-line"><span class="brand-k"></span><span>KarmaFlix</span></div>
+      <h1>Créer un compte</h1>
+      <label class="field">Nom d’utilisateur
+        <input type="text" name="username" required />
+      </label>
+      <label class="field">Email
+        <input type="email" name="email" required />
+      </label>
+      <label class="field">Mot de passe
+        <input type="password" name="password" required />
+      </label>
+      <label class="field">Confirmation
+        <input type="password" name="confirm" required />
+      </label>
+      <div class="row"><label><input type="checkbox" name="terms" /> J’accepte les conditions</label><span>Avatar par défaut: activé</span></div>
+      <p class="error"></p>
+      <button class="btn-auth" type="submit">Créer mon compte</button>
+      <div class="auth-links"><span>Déjà membre ? <a href="login.html">Se connecter</a></span></div>
+    </form>
+  </main>
+  <script src="js/auth.js"></script>
+</body>
+</html>

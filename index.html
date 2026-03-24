@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KarmaFlix • Accueil</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-page="home">
+  <div data-kf-header></div>
+  <main class="main-shell">
+    <section class="hero" id="hero">
+      <div class="hero-content reveal visible">
+        <h1></h1>
+        <p></p>
+        <div class="btn-row">
+          <a class="btn btn-primary" data-hero-link href="#">Regarder</a>
+          <a class="btn btn-secondary" href="my-list.html">Ma liste</a>
+          <a class="btn btn-secondary" href="details.html">Infos</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-wrap reveal"><div class="section-head"><h2>Top 10</h2></div><div class="row-scroll" id="top10Row"></div></section>
+    <section class="section-wrap reveal"><div class="section-head"><h2>Nouveautés</h2></div><div class="row-scroll" id="newRow"></div></section>
+    <section class="section-wrap reveal"><div class="section-head"><h2>Films populaires</h2></div><div class="row-scroll" id="popularRow"></div></section>
+    <section class="section-wrap reveal"><div class="section-head"><h2>Suggestions</h2></div><div class="row-scroll" id="suggestRow"></div></section>
+    <section class="section-wrap reveal"><div class="section-head"><h2>Univers / Franchises</h2></div><div class="row-scroll" id="franchiseRow"></div></section>
+    <section class="section-wrap reveal"><div class="section-head"><h2>Continuer à regarder</h2></div><div class="row-scroll" id="continueRow"></div></section>
+    <section class="section-wrap reveal"><div class="section-head"><h2>Derniers ajouts</h2></div><div class="row-scroll" id="lastRow"></div></section>
+  </main>
+  <div data-kf-footer></div>
+  <script src="js/data.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
